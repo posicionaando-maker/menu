@@ -3,58 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Mi Restaurante - Aperitivos</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="theme-color" content="#0D0D0D">
+    <meta name="description" content="Menú digital del restaurante - Funciona offline">
+    
+    <!-- Título que aparece en la pestaña del navegador -->
+    <title>Menú Digital · Restaurante Cuba</title>
+    
+    <!-- Link a la hoja de estilos (CSS) -->
+    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- Iconos para la PWA (diferentes tamaños para distintos dispositivos) -->
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#2c3e50">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="icons/icon-192.png">
+    
+    <!-- Color de la barra de estado en móviles (Android) -->
+    <meta name="theme-color" content="#0D0D0D">
 </head>
 <body>
-    <header>
-        <h1>🍽️ Mi Restaurante</h1>
-        <nav>
-            <a href="#" class="active">Aperitivos</a>
-            <a href="#">Principales</a>
-            <a href="#">Postres</a>
-            <a href="#">Bebidas</a>
-        </nav>
-    </header>
-
-    <main>
-        <h2>Aperitivos</h2>
+    <!-- Contenedor principal de toda la app -->
+    <div class="app-container">
         
-        <div class="menu-item">
-            <div class="item-header">
-                <h3>Mixed vegetable</h3>
-                <span class="price">USD 3.50</span>
-            </div>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        <!-- Encabezado con el nombre del restaurante -->
+        <header class="header">
+            <h1>🍽️ El Sabor de Cuba</h1>
+            <p class="subtitle">Menú digital · Siempre actualizado</p>
+            <!-- Fecha de la última actualización del menú (se llena con JavaScript) -->
+            <div class="last-update" id="lastUpdate">Cargando...</div>
+        </header>
+
+        <!-- Tabs (pestañas) para filtrar por categoría -->
+        <div class="tabs" id="tabs">
+            <!-- Los botones se generan dinámicamente con JavaScript -->
+            <button class="tab-btn active" data-categoria="todos">📋 Todos</button>
         </div>
 
-        <div class="menu-item">
-            <div class="item-header">
-                <h3>Nacho chip</h3>
-                <span class="price">USD 3.50</span>
-            </div>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        <!-- Grid (cuadrícula) donde se muestran los platos -->
+        <div class="menu-grid" id="menuGrid">
+            <!-- Aquí JavaScript inyectará las tarjetas de platos -->
+            <div class="loading-spinner">Cargando menú...</div>
         </div>
 
-        <div class="menu-item">
-            <div class="item-header">
-                <h3>Salmon roleux</h3>
-                <span class="price">USD 3.50</span>
-            </div>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-        </div>
-    </main>
+        <!-- Botón flotante para actualizar manualmente -->
+        <button class="btn-actualizar" id="btnActualizar" title="Actualizar menú desde Google Drive">
+            🔄
+        </button>
+        
+        <!-- Notificación flotante (snackbar) para mostrar mensajes al usuario -->
+        <div id="snackbar" class="snackbar">Mensaje</div>
+    </div>
 
-    <footer>
-        <p>© 2025 Mi Restaurante - Todos los derechos reservados</p>
-        <p class="offline-status">✅ Listo para usar offline</p>
-    </footer>
-
-    <script src="app.js"></script>
+    <!-- Scripts: primero la base de datos, luego la lógica principal -->
+    <script src="js/db.js"></script>
+    <script src="js/app.js"></script>
+    
+    <!-- Registrar el Service Worker (para offline) -->
+    <script>
+        // Verifica si el navegador soporta Service Workers
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                // Registra el archivo sw.js que está en la raíz
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('✅ Service Worker registrado:', reg))
+                    .catch(err => console.error('❌ Error al registrar SW:', err));
+            });
+        }
+    </script>
 </body>
 </html>
